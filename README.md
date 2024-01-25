@@ -1,1 +1,1 @@
-# hushh-jobs-emails
+# gmail-api
