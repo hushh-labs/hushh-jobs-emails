@@ -13,9 +13,14 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 # Replace these with your own values from the Google Developer Console
-GOOGLE_CLIENT_ID = ""
-GOOGLE_CLIENT_SECRET = ""
-GOOGLE_REDIRECT_URI = ""
+# GOOGLE_CLIENT_ID = ""
+# GOOGLE_CLIENT_SECRET = ""
+# GOOGLE_REDIRECT_URI = ""
+
+GOOGLE_CLIENT_ID = "53407187172-283soe7ku29rkrmch51r1d7rkghmpie3.apps.googleusercontent.com"
+GOOGLE_CLIENT_SECRET = "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"
+GOOGLE_REDIRECT_URI = "http://127.0.0.1:8000/auth/google"
+
 
 
 
@@ -51,7 +56,7 @@ async def auth_google(code: str):
     #You can change this job query to get the specific documents 
     #jobs_query = "subject:new application:iOS Developer has:attachment after:2023/11/01 "
     jobs_query = "subject:new application:iOS Developer has:attachment after:2023/11/01 before:2023/12/14"
-    gmail_url = f"https://www.googleapis.com/gmail/v1/users/me/messages?q={jobs_query}&maxResults=110"
+    gmail_url = f"https://www.googleapis.com/gmail/v1/users/me/messages?q={jobs_query}&maxResults=1"
     gmail_response = requests.get(gmail_url, headers={"Authorization": f"Bearer {access_token}"})
     messages = gmail_response.json().get("messages", [])
     print(messages)

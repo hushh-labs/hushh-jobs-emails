@@ -1,3 +1,5 @@
 emailenv
 .DS_Store
+__pycache__
 credentials.txt
+r
