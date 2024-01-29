@@ -5,6 +5,7 @@ import requests
 import webbrowser
 import base64
 import json
+from fastapi import Query
 
 app = FastAPI()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -53,6 +54,7 @@ async def auth_google(code: str):
     #You can change this job query to get the specific documents 
     #jobs_query = "subject:new application:iOS Developer has:attachment after:2023/11/01 "
     jobs_query = "subject:new application:iOS Developer has:attachment after:2023/11/01 before:2023/12/14"
+    #jobs_query= custom_parameter
     gmail_url = f"https://www.googleapis.com/gmail/v1/users/me/messages?q={jobs_query}&maxResults=1"
     gmail_response = requests.get(gmail_url, headers={"Authorization": f"Bearer {access_token}"})
     messages = gmail_response.json().get("messages", [])
