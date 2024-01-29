@@ -4,24 +4,21 @@ import requests
 #from jose import jwt
 import webbrowser
 import base64
+import json
 
 app = FastAPI()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
+# Read credentials from the file
+with open('credentials_webapp.json', 'r') as file:
+    credentials = json.load(file)
 
-
-
-# Replace these with your own values from the Google Developer Console
-# GOOGLE_CLIENT_ID = ""
-# GOOGLE_CLIENT_SECRET = ""
-# GOOGLE_REDIRECT_URI = ""
-
-GOOGLE_CLIENT_ID = "53407187172-283soe7ku29rkrmch51r1d7rkghmpie3.apps.googleusercontent.com"
-GOOGLE_CLIENT_SECRET = "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"
-GOOGLE_REDIRECT_URI = "http://127.0.0.1:8000/auth/google"
-
-
+# Extract values from the 'web' dictionary
+web_credentials = credentials.get("web", {})
+GOOGLE_CLIENT_ID = web_credentials.get("client_id")
+GOOGLE_CLIENT_SECRET = web_credentials.get("client_secret")
+GOOGLE_REDIRECT_URI = web_credentials.get("redirect_uris", [])[0]  # Assuming the list has at least one element
 
 
 @app.get("/login/google")

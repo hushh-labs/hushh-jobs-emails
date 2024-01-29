@@ -3,3 +3,5 @@ emailenv
 __pycache__
 credentials.txt
 r
+credentials_webapp.json
+credentials_desktop_app.json
