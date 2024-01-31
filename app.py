@@ -7,9 +7,11 @@ from test import auth_google
 
 st.title('Hushh-emails')
 
-st.write("Enter your query")
+text_input = st.text_input(
+        "Enter your gmail query 👇"
+    )
 
-if st.button('Login to your google account'):
+if st.button('Fetch resumes'):
     login = requests.get(url= "http://127.0.0.1:8000/login/google")
     # token = login.text
     # fetch = requests.get(url= "http://127.0.0.1:8000/auth/google/?code={token}")

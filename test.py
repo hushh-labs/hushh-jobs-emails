@@ -24,6 +24,7 @@ GOOGLE_REDIRECT_URI = web_credentials.get("redirect_uris", [])[0]  # Assuming th
 
 @app.get("/login/google")
 async def login_google():
+    #custom_parameter: str
     # oauth_url = f"https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={GOOGLE_CLIENT_ID}&redirect_uri={GOOGLE_REDIRECT_URI}&scope=openid%20profile%20email&access_type=offline"
     
     #Below is the URL to prompt the user to login to his specified gmail account and also give a readonly access to his gmail
