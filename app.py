@@ -2,8 +2,6 @@ import streamlit as st
 import pandas as pd 
 import numpy as np 
 import requests
-from test import login_google
-from test import auth_google
 
 st.title('Hushh-emails')
 
@@ -16,8 +14,12 @@ if st.button('Login to your google account'):
     "access_token":access_token,
     "user_query": gmail_query,
 }
-    response = requests.post("http://127.0.0.1:8000/auth/google", json=json_data)
-    print(response)
+    
+    response = requests.post("http://127.0.0.1:8000/download/google", json=json_data)
+    
+    #print(json_data)
+    # response = requests.post("http://127.0.0.1:8000/download/google", json=json_data)
+    # print(response)
     #query= requests.get(url="http://127.0.0.1:8000/auth/google")
     # token = login.text
     # fetch = requests.get(url= "http://127.0.0.1:8000/auth/google/?code={token}")
