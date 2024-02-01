@@ -1,10 +1,11 @@
-from fastapi import FastAPI, Depends, Request
+from fastapi import FastAPI, Depends, Request, Query
 from fastapi.security import OAuth2PasswordBearer
 import requests
 #from jose import jwt
 import webbrowser
 import base64
 import json
+
 
 
 
@@ -32,22 +33,14 @@ async def login_google(gmail_query:str):
     oauth_url = f"https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={GOOGLE_CLIENT_ID}&redirect_uri={GOOGLE_REDIRECT_URI}&scope=openid%20profile%20email%20https://www.googleapis.com/auth/gmail.readonly&access_type=offline"
 
     webbrowser.open(oauth_url)
-
-    
-
     return {
         "url": f"https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={GOOGLE_CLIENT_ID}&redirect_uri={GOOGLE_REDIRECT_URI}&scope=openid%20profile%20email&access_type=offline"
     }
 
-
+obtained_access_token:str
 
 @app.get("/auth/google")
-async def auth_google(code: str,gmail_query: str):
-    #data = await request.json()
-    # access_token = data.get("access_token")
-    # gmail_query = data.get("user_query")
-    #This code is basically the authorization code and this authorization code helps us to get the access token with the required scopes that we have set .
-    #We require the gmail.readonly scopes that requires verification of our application and all.
+async def get_access_token(code:str):
     token_url = "https://accounts.google.com/o/oauth2/token"
     print(code)
     data = {
@@ -59,12 +52,40 @@ async def auth_google(code: str,gmail_query: str):
     }
     response = requests.post(token_url, data=data)
     access_token = response.json().get("access_token")
+    obtained_access_token=access_token
+
     print(response.json())
+
+    return{"access_token":access_token}
+
+@app.get("/test/google")
+async def test(q:str):
+    print(q)
+
+@app.get("/download/google/{obtained_access_token}")
+async def auth_google(access_token:str, q: str):
+    #data = await request.json()
+    #access_token = data.get("access_token")
+    # gmail_query = data.get("user_query")
+    #This code is basically the authorization code and this authorization code helps us to get the access token with the required scopes that we have set .
+    #We require the gmail.readonly scopes that requires verification of our application and all.
+    #token_url = "https://accounts.google.com/o/oauth2/token"
+    #print(code)
+    # data = {
+    #     "code": code,
+    #     "client_id": GOOGLE_CLIENT_ID,
+    #     "client_secret": GOOGLE_CLIENT_SECRET,
+    #     "redirect_uri": GOOGLE_REDIRECT_URI,
+    #     "grant_type": "authorization_code",
+    # }
+    # response = requests.post(token_url, data=data)
+    # access_token = response.json().get("access_token")
+    # print(response.json())
     user_info = requests.get("https://www.googleapis.com/oauth2/v1/userinfo", headers={"Authorization": f"Bearer {access_token}"})
     #You can change this job query to get the specific documents 
     #jobs_query = "subject:new application:iOS Developer has:attachment after:2023/11/01 "
     #jobs_query = "subject:new application:iOS Developer has:attachment after:2023/11/01 before:2023/12/14"
-    jobs_query= gmail_query
+    jobs_query= q
     gmail_url = f"https://www.googleapis.com/gmail/v1/users/me/messages?q={jobs_query}&maxResults=1"
     gmail_response = requests.get(gmail_url, headers={"Authorization": f"Bearer {access_token}"})
     messages = gmail_response.json().get("messages", [])
