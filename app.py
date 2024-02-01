@@ -2,8 +2,8 @@ import streamlit as st
 import pandas as pd 
 import numpy as np 
 import requests
-from test import login_google
-from test import auth_google
+# from test import login_google
+# from test import auth_google
 
 st.title('Hushh-emails')
 
