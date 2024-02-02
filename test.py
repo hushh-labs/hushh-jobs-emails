@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Depends, Request, Query
 from fastapi.security import OAuth2PasswordBearer
+from fastapi.responses import RedirectResponse
 import requests
 #from jose import jwt
 import webbrowser
@@ -25,7 +26,7 @@ GOOGLE_REDIRECT_URI = web_credentials.get("redirect_uris", [])[0]  # Assuming th
 
 
 @app.get("/login/google")
-async def login_google(gmail_query:str):
+async def login_google():
 
     # oauth_url = f"https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={GOOGLE_CLIENT_ID}&redirect_uri={GOOGLE_REDIRECT_URI}&scope=openid%20profile%20email&access_type=offline"
     
@@ -33,11 +34,11 @@ async def login_google(gmail_query:str):
     oauth_url = f"https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={GOOGLE_CLIENT_ID}&redirect_uri={GOOGLE_REDIRECT_URI}&scope=openid%20profile%20email%20https://www.googleapis.com/auth/gmail.readonly&access_type=offline"
 
     webbrowser.open(oauth_url)
-    return {
-        "url": f"https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={GOOGLE_CLIENT_ID}&redirect_uri={GOOGLE_REDIRECT_URI}&scope=openid%20profile%20email&access_type=offline"
-    }
+    # return {
+    #     "url": f"https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={GOOGLE_CLIENT_ID}&redirect_uri={GOOGLE_REDIRECT_URI}&scope=openid%20profile%20email&access_type=offline"
+    # }
 
-obtained_access_token:str
+obtained_access_token='hi'
 
 @app.get("/auth/google")
 async def get_access_token(code:str):
@@ -56,16 +57,19 @@ async def get_access_token(code:str):
 
     print(response.json())
 
-    return{"access_token":access_token}
+    redirect_url = f"/download/google?access_token={access_token}"
+    return RedirectResponse(url=redirect_url)
+    #return{"access_token":obtained_access_token}
+    #return{"access_token":access_token}
 
 @app.get("/test/google")
 async def test(q:str):
     print(q)
 
-@app.get("/download/google/{obtained_access_token}")
-async def auth_google(access_token:str, q: str):
-    #data = await request.json()
-    #access_token = data.get("access_token")
+@app.get("/download/google/")
+async def auth_google(access_token:str, q: str = Query(..., alias="q_from_streamlit")):
+    # data = await request.json()
+    # access_token = data.get("access_token")
     # gmail_query = data.get("user_query")
     #This code is basically the authorization code and this authorization code helps us to get the access token with the required scopes that we have set .
     #We require the gmail.readonly scopes that requires verification of our application and all.

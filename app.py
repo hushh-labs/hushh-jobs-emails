@@ -15,12 +15,23 @@ gmail_query= st.text_input("Query")
 
 if st.button('Login to your google account'):
 
-    login = requests.get(url= "http://127.0.0.1:8000/login/google")
+    requests.get(url= "http://127.0.0.1:8000/login/google")
+    # print(login)
 
-    requests.get(url=f"http://127.0.0.1:8000/download/google/{obtained_access_token}?q={gmail_query}")
+    # json=login.json()
+    # access_token=json.get('access_token')
+    # access_token = requests.get(url= "http://127.0.0.1:8000/login/google")
+    # print(access_token)
+    #"access_token":login["access_token"]
+
+    #access_token= login["access_token"]
+    # print(access_token)
+   
+
+    requests.get(url=f"http://127.0.0.1:8000/download/google/?q={gmail_query}")
     #requests.get(url=f"http://127.0.0.1:8000/test/google?q={gmail_query}")
 
-#     access_token = requests.get(url= "http://127.0.0.1:8000/login/google")
+    
 #     json_data = {
 #     "access_token":access_token,
 #     "user_query": gmail_query,
