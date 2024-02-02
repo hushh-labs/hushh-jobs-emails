@@ -34,11 +34,12 @@ async def login_google():
     oauth_url = f"https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={GOOGLE_CLIENT_ID}&redirect_uri={GOOGLE_REDIRECT_URI}&scope=openid%20profile%20email%20https://www.googleapis.com/auth/gmail.readonly&access_type=offline"
 
     webbrowser.open(oauth_url)
-    # return {
-    #     "url": f"https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={GOOGLE_CLIENT_ID}&redirect_uri={GOOGLE_REDIRECT_URI}&scope=openid%20profile%20email&access_type=offline"
-    # }
+    return {
+        "url": f"https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={GOOGLE_CLIENT_ID}&redirect_uri={GOOGLE_REDIRECT_URI}&scope=openid%20profile%20email&access_type=offline"
+    }
+    
 
-obtained_access_token='hi'
+
 
 @app.get("/auth/google")
 async def get_access_token(code:str):
@@ -59,7 +60,7 @@ async def get_access_token(code:str):
 
     redirect_url = f"/download/google?access_token={access_token}"
     return RedirectResponse(url=redirect_url)
-    #return{"access_token":obtained_access_token}
+   
     #return{"access_token":access_token}
 
 @app.get("/test/google")
