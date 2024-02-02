@@ -16,6 +16,8 @@ gmail_query= st.text_input("Query")
 if st.button('Login to your google account'):
 
     requests.get(url= "http://127.0.0.1:8000/login/google")
+
+    #requests.get(url=f"http://127.0.0.1:8000/test/google")
     # print(login)
 
     # json=login.json()
@@ -28,7 +30,7 @@ if st.button('Login to your google account'):
     # print(access_token)
    
 
-    requests.get(url=f"http://127.0.0.1:8000/download/google/?q={gmail_query}")
+    #requests.get(url=f"http://127.0.0.1:8000/download/google/?q={gmail_query}")
     #requests.get(url=f"http://127.0.0.1:8000/test/google?q={gmail_query}")
 
     

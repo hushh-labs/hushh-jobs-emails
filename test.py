@@ -64,14 +64,15 @@ async def get_access_token(code:str):
     #return{"access_token":access_token}
 
 @app.get("/test/google")
-async def test(q:str):
-    print(q)
+async def test(request: Request):
+    data =await request.json()
+    print(data)
 
 @app.get("/download/google/")
-async def auth_google(access_token:str, q: str = Query(..., alias="q_from_streamlit")):
-    # data = await request.json()
+async def auth_google(access_token:str):
+    #data = await request.json()
     # access_token = data.get("access_token")
-    # gmail_query = data.get("user_query")
+    #gmail_query = data.get("user_query")
     #This code is basically the authorization code and this authorization code helps us to get the access token with the required scopes that we have set .
     #We require the gmail.readonly scopes that requires verification of our application and all.
     #token_url = "https://accounts.google.com/o/oauth2/token"
