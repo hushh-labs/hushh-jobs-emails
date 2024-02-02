@@ -54,14 +54,14 @@ async def get_access_token(code:str):
     }
     response = requests.post(token_url, data=data)
     access_token = response.json().get("access_token")
-    obtained_access_token=access_token
+    #obtained_access_token=access_token
 
     print(response.json())
 
     redirect_url = f"/download/google?access_token={access_token}"
     return RedirectResponse(url=redirect_url)
    
-    #return{"access_token":access_token}
+    return{"access_token":access_token}
 
 @app.get("/test/google")
 async def test(request: Request):
@@ -91,7 +91,7 @@ async def auth_google(access_token:str):
     #You can change this job query to get the specific documents 
     #jobs_query = "subject:new application:iOS Developer has:attachment after:2023/11/01 "
     #jobs_query = "subject:new application:iOS Developer has:attachment after:2023/11/01 before:2023/12/14"
-    jobs_query= q
+    #jobs_query= q
     gmail_url = f"https://www.googleapis.com/gmail/v1/users/me/messages?q={jobs_query}&maxResults=1"
     gmail_response = requests.get(gmail_url, headers={"Authorization": f"Bearer {access_token}"})
     messages = gmail_response.json().get("messages", [])

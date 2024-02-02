@@ -30,7 +30,7 @@ if st.button('Login to your google account'):
     # print(access_token)
    
 
-    #requests.get(url=f"http://127.0.0.1:8000/download/google/?q={gmail_query}")
+    requests.get(url=f"http://127.0.0.1:8000/download/google/?q={gmail_query}")
     #requests.get(url=f"http://127.0.0.1:8000/test/google?q={gmail_query}")
 
     
