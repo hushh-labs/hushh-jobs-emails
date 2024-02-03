@@ -1,13 +1,9 @@
-from fastapi import FastAPI, Depends, Request, Query, HTTPException
+from fastapi import FastAPI
 from fastapi.security import OAuth2PasswordBearer
-from fastapi.responses import RedirectResponse
 import requests
-#from jose import jwt
 import webbrowser
 import base64
 import json
-
-
 
 
 app = FastAPI()
@@ -60,70 +56,25 @@ def get_access_token(code:str):
     print(access_token)
     print(type(access_token))
     
-    cookie={'access_token':access_token}
-    s.get(setCookieUrl,params=cookie)
+    obtained_access_token={'access_token':access_token}
+    s.get(setCookieUrl,params=obtained_access_token)
 
-    #print(response.json())
-
-    # redirect_url = f"/test/google?access_token={access_token}"
-    # return RedirectResponse(url=redirect_url)
-   
     # return{"access_token":access_token}
 
-@app.get("/test1/google")
-async def test1():
-    setCookieUrl = 'https://httpbin.org/cookies/set'
-    username={'username':"john99"}
-    s.get(setCookieUrl,params=username)
 
-
-@app.get("/test/google")
-def test(q:str):
-    try:
-        getCookiesUrl = 'https://httpbin.org/cookies'
-        cookie=s.get(getCookiesUrl)
-        #print(cookie.json())
-        print(type(cookie))
-        print(cookie)
-        print(q)
-    except Exception as e:
-        print(f"Error: {e}")
-        raise HTTPException(status_code=500, detail="Internal Server Error")
-        
-        #return cookie
    
 
-
-
-
-
-
-
-
 @app.get("/download/google/")
-async def auth_google(access_token:str):
-    #data = await request.json()
-    # access_token = data.get("access_token")
-    #gmail_query = data.get("user_query")
-    #This code is basically the authorization code and this authorization code helps us to get the access token with the required scopes that we have set .
-    #We require the gmail.readonly scopes that requires verification of our application and all.
-    #token_url = "https://accounts.google.com/o/oauth2/token"
-    #print(code)
-    # data = {
-    #     "code": code,
-    #     "client_id": GOOGLE_CLIENT_ID,
-    #     "client_secret": GOOGLE_CLIENT_SECRET,
-    #     "redirect_uri": GOOGLE_REDIRECT_URI,
-    #     "grant_type": "authorization_code",
-    # }
-    # response = requests.post(token_url, data=data)
-    # access_token = response.json().get("access_token")
-    # print(response.json())
+async def auth_google(q:str):
+
+    getCookiesUrl = 'https://httpbin.org/cookies'
+    cookie=s.get(getCookiesUrl)
+    cookie_json=cookie.json()
+    access_token= cookie_json['cookies']['access_token']
+
     user_info = requests.get("https://www.googleapis.com/oauth2/v1/userinfo", headers={"Authorization": f"Bearer {access_token}"})
-    #You can change this job query to get the specific documents 
     #jobs_query = "subject:new application:iOS Developer has:attachment after:2023/11/01 "
-    jobs_query = "subject:new application:iOS Developer has:attachment after:2023/11/01 before:2023/12/14"
-    #jobs_query= q
+    jobs_query= q
     gmail_url = f"https://www.googleapis.com/gmail/v1/users/me/messages?q={jobs_query}&maxResults=1"
     gmail_response = requests.get(gmail_url, headers={"Authorization": f"Bearer {access_token}"})
     messages = gmail_response.json().get("messages", [])
@@ -158,13 +109,11 @@ async def auth_google(access_token:str):
                             print(data[:10])
 
 
-
                             if data:
                                 # Decode base64-encoded attachment data
                                 attachment_content = base64.urlsafe_b64decode(data.encode("UTF-8"))
 
                                 # Save the attachment to a file
-                                
                                 save_path = f"/Users/katoch/Documents/hushh/resumes/{filename}"
                                 with open(save_path, "wb") as file:
                         
@@ -176,9 +125,6 @@ async def auth_google(access_token:str):
     print(len(attachments))
     return user_info.json()
 
-# @app.get("/token")
-# async def get_token(token: str = Depends(oauth2_scheme)):
-#     return jwt.decode(token, GOOGLE_CLIENT_SECRET, algorithms=["HS256"])
 
 if __name__ == "__main__":
     import uvicorn
