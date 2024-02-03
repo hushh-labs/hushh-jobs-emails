@@ -2,20 +2,42 @@ import streamlit as st
 import pandas as pd 
 import numpy as np 
 import requests
-#from test import obtained_access_token
-# from test import login_google
-# from test import auth_google
+
+
+
 
 st.title('Hushh-emails')
 
 st.write("Enter your query")
 gmail_query= st.text_input("Query")
 
-
-
 if st.button('Login to your google account'):
 
     requests.get(url= "http://127.0.0.1:8000/login/google")
+    #requests.get(url="http://127.0.0.1:8000/test1/google")
+
+if st.button('Download resumes'):
+    requests.get(url=f"http://127.0.0.1:8000/test/google?q={gmail_query}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     #requests.get(url=f"http://127.0.0.1:8000/test/google")
     # print(login)
@@ -30,7 +52,7 @@ if st.button('Login to your google account'):
     # print(access_token)
    
 
-    requests.get(url=f"http://127.0.0.1:8000/download/google/?q={gmail_query}")
+    #requests.get(url=f"http://127.0.0.1:8000/download/google/?q={gmail_query}")
     #requests.get(url=f"http://127.0.0.1:8000/test/google?q={gmail_query}")
 
     
